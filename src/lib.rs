@@ -30,7 +30,7 @@ pub async fn read_pdf_links(blob: Blob) {
         .pages()
         .iter()
         .enumerate()
-        .for_each(|(index, page)| {
+        .for_each(|(page_index, page)| {
 
             let mut links_count = 0;
             for (link_index, link) in page.links().iter().enumerate() {
@@ -51,8 +51,24 @@ pub async fn read_pdf_links(blob: Blob) {
     
                 links_count += 1;
             }
-
             log::info!("Total links count: {}", links_count);
+
+            let mut annotations_count = 0;
+            for (annotation_index, annotation) in page.annotations().iter().enumerate() {
+                let annotation_text = page.text().unwrap().for_annotation(&annotation).unwrap();
+
+                log::info!(
+                    "Annotation {} is of type {:?} with text {:?} and with bounds {:?}",
+                    annotation_index,
+                    annotation.annotation_type(),
+                    annotation_text,
+                    annotation.bounds()
+                );
+
+                annotations_count += 1;
+            }
+
+            log::info!("Total annotations count: {}", annotations_count);
         });
 }
 

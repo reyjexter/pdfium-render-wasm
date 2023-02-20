@@ -1,0 +1,60 @@
+mod utils;
+
+#[cfg(target_arch = "wasm32")]
+use pdfium_render::prelude::*;
+
+#[cfg(target_arch = "wasm32")]
+use wasm_bindgen::prelude::*;
+
+use web_sys::Blob;
+
+// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
+// allocator.
+#[cfg(feature = "wee_alloc")]
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
+
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen]
+pub async fn read_pdf_links(blob: Blob) {
+    let pdfium = Pdfium::new(
+        Pdfium::bind_to_system_library().unwrap()
+    );
+
+    let document = pdfium.load_pdf_from_blob(blob, None).await.unwrap();
+
+    log::info!("PDF version: {:?}", document.version());
+
+    document
+        .pages()
+        .iter()
+        .enumerate()
+        .for_each(|(index, page)| {
+
+            let mut links_count = 0;
+            for (link_index, link) in page.links().iter().enumerate() {
+                log::info!(
+                    "Page {} link {} has action of type {:?}",
+                    page_index,
+                    link_index,
+                    link.action().map(|action| action.action_type())
+                );
+    
+                // For links that have URI actions, output the destination URI.
+    
+                if let Some(action) = link.action() {
+                    if let Some(uri_action) = action.as_uri_action() {
+                        log::info!("Link URI destination: {:#?}", uri_action.uri())
+                    }
+                }
+    
+                links_count += 1;
+            }
+
+            log::info!("Total links count: {}", links_count);
+        });
+}
+
+#[allow(dead_code)]
+fn main() {}

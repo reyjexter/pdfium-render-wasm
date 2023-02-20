@@ -1,0 +1,14 @@
+{
+  "name": "pdfium-render-wasm",
+  "collaborators": [
+    "Rey Bumalay <reyjexter@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "pdfium_render_wasm_bg.wasm",
+    "pdfium_render_wasm.js",
+    "pdfium_render_wasm.d.ts"
+  ],
+  "browser": "pdfium_render_wasm.js",
+  "types": "pdfium_render_wasm.d.ts"
+}

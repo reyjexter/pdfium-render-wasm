@@ -1,0 +1,44 @@
+[package]
+name = "pdfium-render-wasm"
+version = "0.1.0"
+authors = ["Rey Bumalay <reyjexter@gmail.com>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["console_error_panic_hook", "wee_alloc", "console_log"]
+
+[dependencies]
+cfg-if = "^1.0.0"
+wee_alloc = { version = "^0.4.5", optional = true }
+wasm-bindgen = "^0.2.84"
+wasm-bindgen-futures = "^0.4.33"
+log = "^0.4"
+console_log = { version = "^0.2", optional = true }
+console_error_panic_hook = { version = "^0.1.7", optional = true }
+serde = { version = "^1.0.152", features = ["derive"] }
+serde-wasm-bindgen = "^0.4.5"
+
+[dev-dependencies]
+wasm-bindgen-test = "^0.3.33"
+
+[dependencies.pdfium-render]
+git = "https://github.com/ajrcarey/pdfium-render"
+branch = "master"
+
+[dependencies.web-sys]
+version = "^0.3.60"
+features = [
+  "console",
+  "ImageData",  
+  "CanvasRenderingContext2d",
+  "Document",
+  "Element",
+  "HtmlCanvasElement",
+  "Window"
+]
+
+[profile.release]
+opt-level = "s"

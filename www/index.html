@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Links Demo</title>
+    <script src="./pdfium.js"></script>
+    <script src="./pdfium_render_wasm.js"></script>
+
+</head>
+
+<body>
+
+
+    <script type="module">
+        const pdf_url = "./example.pdf";
+        
+        PDFiumModule().then(async pdfium_module => {
+            const {
+                initialize_pdfium_render,
+                read_pdf_links
+            } = wasm_bindgen;
+
+            wasm_bindgen('./pdfium_render_wasm_bg.wasm').then(async rust_module => {
+                console.assert(
+                    initialize_pdfium_render(
+                        pdfium_module, 
+                        rust_module, 
+                        false, // Debugging flag;
+                    ),
+                    "Initialization failed!"
+                );
+
+                let blob = await fetch(pdf_url).then(r => r.blob());
+                await read_pdf_links(blob);
+            });
+        });
+        
+    </script>
+</body>
+
+</html>

@@ -69,6 +69,18 @@ pub async fn read_pdf_links(blob: Blob) {
             }
 
             log::info!("Total annotations count: {}", annotations_count);
+
+
+            log::info!(
+                "This extracts the correct text: {}",
+                page.objects()
+                    .iter()
+                    .filter_map(|object| object
+                        .as_text_object()
+                        .map(|object| object.text()))
+                    .collect::<Vec<_>>()
+                    .join(" ")
+            );
         });
 }
 

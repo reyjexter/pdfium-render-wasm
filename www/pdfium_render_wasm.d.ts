@@ -7,6 +7,14 @@ declare namespace wasm_bindgen {
 	*/
 	export function read_pdf_links(blob: Blob): Promise<void>;
 	/**
+	* @param {Blob} blob
+	* @param {number} index
+	* @param {number} width
+	* @param {number} height
+	* @returns {Promise<ImageData>}
+	*/
+	export function get_image_data_for_page(blob: Blob, index: number, width: number, height: number): Promise<ImageData>;
+	/**
 	* Establishes a binding between an external Pdfium WASM module and `pdfium-render`'s WASM module.
 	* This function should be called from Javascript once the external Pdfium WASM module has been loaded
 	* into the browser. It is essential that this function is called _before_ initializing
@@ -47,6 +55,7 @@ declare type InitInput = RequestInfo | URL | Response | BufferSource | WebAssemb
 declare interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly read_pdf_links: (a: number) => number;
+  readonly get_image_data_for_page: (a: number, b: number, c: number, d: number) => number;
   readonly initialize_pdfium_render: (a: number, b: number, c: number) => number;
   readonly read_block_from_callback_wasm: (a: number, b: number, c: number, d: number) => number;
   readonly write_block_from_callback_wasm: (a: number, b: number, c: number) => number;

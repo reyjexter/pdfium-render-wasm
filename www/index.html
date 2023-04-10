@@ -3,22 +3,23 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Links Demo</title>
+    <title>WASM Demo</title>
     <script src="./pdfium.js"></script>
     <script src="./pdfium_render_wasm.js"></script>
 
 </head>
 
 <body>
-
+    <canvas id="canvas" style="max-width: 100%; height: auto; border: 1px solid black;"></canvas>
 
     <script type="module">
-        const pdf_url = "./dynamic-template.pdf";
+        const pdf_url = "./long-content.pdf";
         
         PDFiumModule().then(async pdfium_module => {
             const {
                 initialize_pdfium_render,
-                read_pdf_links
+                read_pdf_links,
+                get_image_data_for_page
             } = wasm_bindgen;
 
             wasm_bindgen('./pdfium_render_wasm_bg.wasm').then(async rust_module => {
@@ -33,6 +34,22 @@
 
                 let blob = await fetch(pdf_url).then(r => r.blob());
                 await read_pdf_links(blob);
+
+                const pageIndex = 0; // Zero-based index of the page we wish to render.
+                const width = 7410;
+                const height = 84699;
+
+                const canvas = document.getElementById("canvas");
+
+                canvas.width = width;
+                canvas.height = height;
+
+                const context = canvas.getContext("2d");
+
+                const imageData = await get_image_data_for_page(blob, pageIndex, width, height);
+
+                context.putImageData(imageData, 0, 0);
+
             });
         });
         

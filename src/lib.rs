@@ -6,7 +6,7 @@ use pdfium_render::prelude::*;
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
-use web_sys::Blob;
+use web_sys::{Blob, ImageData};
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -82,6 +82,33 @@ pub async fn read_pdf_links(blob: Blob) {
                     .join(" ")
             );
         });
+}
+
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen]
+pub async fn get_image_data_for_page(
+    blob: Blob,
+    index: PdfPageIndex,
+    width: u16,
+    height: u16,
+) -> ImageData {
+    Pdfium::new(Pdfium::bind_to_system_library().unwrap())
+        .load_pdf_from_blob(blob, None)
+        .await
+        .unwrap()
+        .pages()
+        .get(index)
+        .unwrap()
+        .render_with_config(
+            &PdfRenderConfig::new()
+                .set_target_size(width, height)
+                .render_form_data(true)
+                .highlight_text_form_fields(PdfColor::SOLID_YELLOW.with_alpha(128))
+                .highlight_checkbox_form_fields(PdfColor::SOLID_BLUE.with_alpha(128)),
+        )
+        .unwrap()
+        .as_image_data()
+        .unwrap()
 }
 
 #[allow(dead_code)]

@@ -235,6 +235,18 @@ __exports.read_pdf_links = function(blob) {
 };
 
 /**
+* @param {Blob} blob
+* @param {number} index
+* @param {number} width
+* @param {number} height
+* @returns {Promise<ImageData>}
+*/
+__exports.get_image_data_for_page = function(blob, index, width, height) {
+    const ret = wasm.get_image_data_for_page(addHeapObject(blob), index, width, height);
+    return takeObject(ret);
+};
+
+/**
 * Establishes a binding between an external Pdfium WASM module and `pdfium-render`'s WASM module.
 * This function should be called from Javascript once the external Pdfium WASM module has been loaded
 * into the browser. It is essential that this function is called _before_ initializing
@@ -298,7 +310,20 @@ function handleError(f, args) {
 function getArrayU8FromWasm0(ptr, len) {
     return getUint8Memory0().subarray(ptr / 1, ptr / 1 + len);
 }
-function __wbg_adapter_91(arg0, arg1, arg2, arg3) {
+
+let cachedUint8ClampedMemory0 = null;
+
+function getUint8ClampedMemory0() {
+    if (cachedUint8ClampedMemory0 === null || cachedUint8ClampedMemory0.byteLength === 0) {
+        cachedUint8ClampedMemory0 = new Uint8ClampedArray(wasm.memory.buffer);
+    }
+    return cachedUint8ClampedMemory0;
+}
+
+function getClampedArrayU8FromWasm0(ptr, len) {
+    return getUint8ClampedMemory0().subarray(ptr / 1, ptr / 1 + len);
+}
+function __wbg_adapter_94(arg0, arg1, arg2, arg3) {
     wasm.wasm_bindgen__convert__closures__invoke2_mut__h544cb0e042e59833(arg0, arg1, addHeapObject(arg2), addHeapObject(arg3));
 }
 
@@ -410,6 +435,10 @@ imports.wbg.__wbg_decode_6c1fbcfa4d9046dd = function() { return handleError(func
     const len0 = WASM_VECTOR_LEN;
     getInt32Memory0()[arg0 / 4 + 1] = len0;
     getInt32Memory0()[arg0 / 4 + 0] = ptr0;
+}, arguments) };
+imports.wbg.__wbg_newwithu8clampedarrayandsh_5983a7df9463fed0 = function() { return handleError(function (arg0, arg1, arg2, arg3) {
+    const ret = new ImageData(getClampedArrayU8FromWasm0(arg0, arg1), arg2 >>> 0, arg3 >>> 0);
+    return addHeapObject(ret);
 }, arguments) };
 imports.wbg.__wbg_debug_8db2eed1bf6c1e2a = function(arg0) {
     console.debug(getObject(arg0));
@@ -529,7 +558,7 @@ imports.wbg.__wbg_new_9d3a9ce4282a18a8 = function(arg0, arg1) {
             const a = state0.a;
             state0.a = 0;
             try {
-                return __wbg_adapter_91(a, state0.b, arg0, arg1);
+                return __wbg_adapter_94(a, state0.b, arg0, arg1);
             } finally {
                 state0.a = a;
             }
@@ -612,8 +641,8 @@ imports.wbg.__wbindgen_memory = function() {
     const ret = wasm.memory;
     return addHeapObject(ret);
 };
-imports.wbg.__wbindgen_closure_wrapper2434 = function(arg0, arg1, arg2) {
-    const ret = makeMutClosure(arg0, arg1, 1758, __wbg_adapter_28);
+imports.wbg.__wbindgen_closure_wrapper2471 = function(arg0, arg1, arg2) {
+    const ret = makeMutClosure(arg0, arg1, 1764, __wbg_adapter_28);
     return addHeapObject(ret);
 };
 
@@ -630,6 +659,7 @@ function finalizeInit(instance, module) {
     cachedFloat64Memory0 = null;
     cachedInt32Memory0 = null;
     cachedUint8Memory0 = null;
+    cachedUint8ClampedMemory0 = null;
 
 
     return wasm;

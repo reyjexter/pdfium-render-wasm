@@ -2,6 +2,7 @@
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
 export function read_pdf_links(a: number): number;
+export function get_image_data_for_page(a: number, b: number, c: number, d: number): number;
 export function initialize_pdfium_render(a: number, b: number, c: number): number;
 export function read_block_from_callback_wasm(a: number, b: number, c: number, d: number): number;
 export function write_block_from_callback_wasm(a: number, b: number, c: number): number;

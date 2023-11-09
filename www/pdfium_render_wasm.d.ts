@@ -15,6 +15,11 @@ declare namespace wasm_bindgen {
 	*/
 	export function get_image_data_for_page(blob: Blob, index: number, width: number, height: number): Promise<ImageData>;
 	/**
+	* @param {Blob} blob
+	* @returns {Promise<void>}
+	*/
+	export function read_texts(blob: Blob): Promise<void>;
+	/**
 	* Establishes a binding between an external Pdfium WASM module and `pdfium-render`'s WASM module.
 	* This function should be called from Javascript once the external Pdfium WASM module has been loaded
 	* into the browser. It is essential that this function is called _before_ initializing
@@ -56,16 +61,17 @@ declare interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly read_pdf_links: (a: number) => number;
   readonly get_image_data_for_page: (a: number, b: number, c: number, d: number) => number;
+  readonly read_texts: (a: number) => number;
   readonly initialize_pdfium_render: (a: number, b: number, c: number) => number;
   readonly read_block_from_callback_wasm: (a: number, b: number, c: number, d: number) => number;
   readonly write_block_from_callback_wasm: (a: number, b: number, c: number) => number;
   readonly __wbindgen_malloc: (a: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number) => number;
   readonly __wbindgen_export_2: WebAssembly.Table;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hbd7fb8f4ec0f64c5: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h3e5e36935cec97cc: (a: number, b: number, c: number) => void;
   readonly __wbindgen_free: (a: number, b: number) => void;
   readonly __wbindgen_exn_store: (a: number) => void;
-  readonly wasm_bindgen__convert__closures__invoke2_mut__h544cb0e042e59833: (a: number, b: number, c: number, d: number) => void;
+  readonly wasm_bindgen__convert__closures__invoke2_mut__h20e8f424cb2183a5: (a: number, b: number, c: number, d: number) => void;
 }
 
 /**

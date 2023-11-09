@@ -111,5 +111,37 @@ pub async fn get_image_data_for_page(
         .unwrap()
 }
 
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen]
+pub async fn read_texts(blob: Blob) {
+    let pdfium = Pdfium::new(
+        Pdfium::bind_to_system_library().unwrap()
+    );
+
+    let document = pdfium.load_pdf_from_blob(blob, None).await.unwrap();
+
+    log::info!("PDF version: {:?}", document.version());
+
+    document
+        .pages()
+        .iter()
+        .enumerate()
+        .for_each(|(page_index, page)| {
+            log::info!("Page text all: {:?}", page.text().unwrap().all());
+
+            let text_bindings = page.text().unwrap();
+            let text_segments = text_bindings
+                .segments()
+                .iter()
+                .enumerate()
+                .map(|(index, segment)| {
+                    log::info!("Segment: {}", segment.text());
+                    segment.text()
+                })
+                .collect::<Vec<String>>();
+
+        });
+}
+
 #[allow(dead_code)]
 fn main() {}

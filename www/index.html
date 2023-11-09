@@ -13,13 +13,14 @@
     <canvas id="canvas" style="max-width: 100%; height: auto; border: 1px solid black;"></canvas>
 
     <script type="module">
-        const pdf_url = "./long-content.pdf";
+        const pdf_url = "./font-extract-test.pdf";
         
         PDFiumModule().then(async pdfium_module => {
             const {
                 initialize_pdfium_render,
                 read_pdf_links,
-                get_image_data_for_page
+                get_image_data_for_page,
+                read_texts
             } = wasm_bindgen;
 
             wasm_bindgen('./pdfium_render_wasm_bg.wasm').then(async rust_module => {
@@ -33,15 +34,15 @@
                 );
 
                 let blob = await fetch(pdf_url).then(r => r.blob());
-                await read_pdf_links(blob);
+                await read_texts(blob);
 
                 const pageIndex = 0; // Zero-based index of the page we wish to render.
-                const width = 7410;
-                const height = 84699;
+                //const width = 7410;
+                //const height = 84699;
 
                 // This renders correctly
-                // const width = 2223;
-                // const height = 25400;
+                const width = 7410;
+                const height = 19163;
 
                 const canvas = document.getElementById("canvas");
 

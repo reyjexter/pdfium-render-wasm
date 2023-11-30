@@ -13,7 +13,7 @@
     <canvas id="canvas" style="max-width: 100%; height: auto; border: 1px solid black;"></canvas>
 
     <script type="module">
-        const pdf_url = "./panic.pdf";
+        const pdf_url = "./example.pdf";
         
         PDFiumModule().then(async pdfium_module => {
             const {
@@ -28,7 +28,7 @@
                     initialize_pdfium_render(
                         pdfium_module, 
                         rust_module, 
-                        false, // Debugging flag;
+                        true, // Debugging flag;
                     ),
                     "Initialization failed!"
                 );

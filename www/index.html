@@ -13,7 +13,7 @@
     <canvas id="canvas" style="max-width: 100%; height: auto; border: 1px solid black;"></canvas>
 
     <script type="module">
-        const pdf_url = "./font-extract-test.pdf";
+        const pdf_url = "./panic.pdf";
         
         PDFiumModule().then(async pdfium_module => {
             const {
@@ -37,12 +37,10 @@
                 await read_texts(blob);
 
                 const pageIndex = 0; // Zero-based index of the page we wish to render.
-                //const width = 7410;
-                //const height = 84699;
-
+            
                 // This renders correctly
-                const width = 7410;
-                const height = 19163;
+                const width = 2000;
+                const height = 2000;
 
                 const canvas = document.getElementById("canvas");
 
@@ -52,7 +50,7 @@
                 const context = canvas.getContext("2d");
 
                 const imageData = await get_image_data_for_page(blob, pageIndex, width, height);
-
+                
                 context.putImageData(imageData, 0, 0);
 
             });
